@@ -32,7 +32,7 @@ struct Filenote {
     Filenote* next;
 };
 
-Filenote *head, *tail, *cur, *newNode, *del, *nextNode;
+Filenote *head = NULL, *tail = NULL, *cur, *newNode, *del, *nextNode;
 
 bool isTailPosition(Filenote* head, int position) {
     cur = head;
@@ -62,6 +62,7 @@ class TextEditor {
         TextEditor(string file_Name = "file.txt") {this->file_Name = file_Name;}
         void writeFile();
         void readFile();
+        void createLineLinkedList(string);
         void addFirstLine(string);
         void addLastLine(string);
         void modifyLine(); // editLine berhubungan dengan edit line
@@ -73,20 +74,32 @@ class TextEditor {
         ~TextEditor(){};
 };
 
+void TextEditor::createLineLinkedList(string line) {
+    head = new Filenote();
+    head->line = line;
+    head->next = NULL;
+    tail = head;
+}
+
 void TextEditor::addFirstLine(string line){
     newNode = new Filenote();
     newNode->line = line;
-    newNode->next = NULL;
-    tail-> next = newNode; 
+    newNode->next = head;
     head = newNode;
 }
 
 void TextEditor::addLastLine(string line){
     newNode = new Filenote();
-    newNode->next = NULL;
-    tail-> next = newNode; 
-    tail = newNode;
-}
+    newNode->line = line;
+    newNode->next = nullptr;
+    
+    if (tail == nullptr) {
+        head = newNode;
+        tail = newNode;
+    } else {
+        tail->next = newNode;
+        tail = newNode;
+    }}
 
 void TextEditor::modifyLine(){
     readFile();
@@ -111,23 +124,25 @@ void TextEditor::readFileEdit(){
 
     if (ifile.is_open()) {
         cout << "openfile" << endl;
-        getline(ifile, line);
-        cout << line << endl;
-        // while (getline(ifile, line)) {
-        //     cout << "ini while" << endl;
-        //     if (iterator == 1) {
-        //         cout << line << endl;
-        //         addFirstLine(line);
-        //     } else {
-        //         cout << line << endl;
-        //         addLastLine(line);
-        //     }
-        //     iterator++;
-        // }
-
+        while (getline(ifile, line)) {
+            cout << "ini while" << endl;
+            if (iterator == 1) {
+                cout << line << endl;
+                createLineLinkedList(line);
+            } else if (iterator == 2) {
+                cout << line << endl;
+                addFirstLine(line);
+            }
+            else {
+                cout << line << endl;
+                addLastLine(line);
+            }
+            iterator++;
+        }
         ifile.close();
     } else {
         cout << "Failed to open the file." << endl;
+        return;
     }
 }
 
@@ -157,25 +172,28 @@ void TextEditor::removeLine() {
 }
 
 // fungsi untuk mengprint linked list ke output
-void TextEditor::printLinkedList(){
+void TextEditor::printLinkedList() {
     ofile.open(file_Name);
-    cout << "ini tes printLinkedlist dari file: " << file_Name << endl;
+    cout << "ini tes printLinkedList dari file: " << file_Name << endl;
     cin.ignore();
     int i = 1; // untuk menghindari enter di akhir file output
     cur = head;
-    while(cur != NULL) {
-        if (i == 1){
+    
+    while (cur != nullptr) {
+        if (i == 1) {
             ofile << cur->line;
             cur = cur->next;
             i++;
         } else {
-            ofile << endl << cur->line ;
+            ofile << endl << cur->line;
             cur = cur->next;
-        } 
+        }
     }
+    
     ofile.close();
     // removeLinkedList();
 }
+
 
 // menghapus semua linkedlist
 void TextEditor::removeLinkedList(Filenote*& head) {
