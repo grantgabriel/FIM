@@ -5,7 +5,7 @@
 using namespace std;
 
 int menu() {
-    int choices;
+    int choice;
 
     system("CLS");
     cout << "\033[34m";
@@ -19,12 +19,24 @@ int menu() {
     cout << "1. Create a new file" << endl;
     cout << "2. Read and open from an existing file" << endl;
     cout << "3. Edit a line from a file" << endl;
-    cout << "4. Delete a line from a file" << endl;
-    cout << "5. Exit\n";
-    cout << "Enter your choices . . .    ";
-    cin >> choices;
+    cout << "4. Delete file" << endl;
+    cout << "0. Exit\n";
+    cout << "Enter your choice . . .    ";
+    cin >> choice;
 
-    return choices;
+    return choice;
+}
+
+int editMenu (){
+    int choice;
+    cout << "1. Add new line" << endl;
+    cout << "2. Edit Line"  << endl;
+    cout << "3. Remove Line"  << endl;
+    cout << "0. Back to menu"  << endl;
+    cout << "Enter your choices . . .    ";
+    cin >> choice;
+    
+    return choice;
 }
 
 struct Filenote {
@@ -32,7 +44,7 @@ struct Filenote {
     Filenote* next;
 };
 
-Filenote *head = NULL, *tail = NULL, *cur, *newNode, *del, *nextNode;
+Filenote *head = NULL, *tail = NULL, *cur, *newNode, *nextNode, *del;
 
 bool isTailPosition(Filenote* head, int position) {
     cur = head;
@@ -62,15 +74,17 @@ class TextEditor {
         TextEditor(string file_Name = "file.txt") {this->file_Name = file_Name;}
         void writeFile();
         void readFile();
-        void createLineLinkedList(string);
-        void addFirstLine(string);
-        void addLastLine(string);
-        void modifyLine(); // editLine berhubungan dengan edit line
-        void editLine(string, int); // editLine membutuhkan parameter dari modifyLine
-        void readFileEdit();
-        void removeLine();
-        void removeLinkedList(Filenote*&);
-        void printLinkedList();
+        // linkedlist
+            void createLineLinkedList(string); // untuk membaca baris pertama file, lalu memasukkannya sebagai linked list yang pertama dibuat
+            void addFirstLine(string); // untuk menambahkan node sebagai node paling awal dari linkedlist
+            void addLastLine(string); // untuk menambahkan node sebagai node yang paling terakhir dari linked list
+            void removeLinkedList(Filenote*&); // untuk menghapus semua node linkedlist
+            void printLinkedList(); // untuk output linkedlist setiap melakukan edit file
+        // memodifikasi
+            void modifyFile(); // editLine berhubungan dengan edit line
+            void editLine(int); // editLine membutuhkan parameter dari modifyFile
+            void readFileEdit(); //untuk membaca file lalu memasukkan barisnya ke dalam linked list
+            void removeLine(); // untuk menghapus baris dari file yang diinginkan
         ~TextEditor(){};
 };
 
@@ -99,42 +113,51 @@ void TextEditor::addLastLine(string line){
     } else {
         tail->next = newNode;
         tail = newNode;
-    }}
-
-void TextEditor::modifyLine(){
-    readFile();
-    int ch;
-    readFileEdit();
-    string editInput;
-    cout << "Insert number of line to edit: ";
-    cin >> ch;
-    cout << "Insert sentence: ";
-    cin >> editInput;
-    // editLine(editInput, ch);
-    system("pause");
-    printLinkedList();
+    }
 }
 
-void TextEditor::readFileEdit(){
-    cout << "ini tes readFileEdit dari file: " << file_Name << endl;
-    int iterator = 1;
+void TextEditor::modifyFile(){
+    readFile();
+    int ch, userChEdit = editMenu();
+    /* 
+        aku mau buat menu untuk modify line, yang mana isinya;
+        mengedit line sesuai pilihan, remove line, tambah line
+     */
+    switch (userChEdit)
+    {
+        case 1:
+            break;
+        case 2:
+            cout << "Insert line number to edit: ";
+            cin >> ch;
+            editLine(ch);
+            break;
+        case 3:
+            removeLine();
+            break;
+        case 0:
+            menu;
+            return;
+            break;
+        default:
+            break;
+    }
+    // printLinkedList();
+    // system("pause");
+}
+
+void TextEditor::readFileEdit() {
     string line;
 
     ifile.open(file_Name);
-
     if (ifile.is_open()) {
-        cout << "openfile" << endl;
-        while (getline(ifile, line)) {
-            cout << "ini while" << endl;
+        int iterator = 1;
+        while (!ifile.eof()) {
+            getline(ifile, line);
             if (iterator == 1) {
-                cout << line << endl;
                 createLineLinkedList(line);
-            } else if (iterator == 2) {
-                cout << line << endl;
-                addFirstLine(line);
             }
             else {
-                cout << line << endl;
                 addLastLine(line);
             }
             iterator++;
@@ -146,39 +169,75 @@ void TextEditor::readFileEdit(){
     }
 }
 
-void TextEditor::editLine(string line, int posisi){
-    if (line == "") {
-        del = tail;
-        cur = head;
 
-        while (cur->next != tail) {
-            cur = cur->next;
-        }
-        
-        tail = cur;
-        tail->next = NULL;
-        delete del;
-    } else {
-        tail->line = line;
+void TextEditor::editLine(int ch){
+    cur = head;
+    int count = 1;
+    // untuk mencari baris yang akan diedit
+    while (cur != nullptr && count < ch){
+        cur = cur ->next;
+        count++;
     }
+    // jika tidak ditemukan akan mereturn
+    if (cur == nullptr){
+        cout << "Line not found" << endl;
+        return;
+    }
+    
+    string newLine;
+    cout << "Insert the new content: ";
+    cin.ignore();
+    getline(cin, newLine);
+    cur->line = newLine;
+    printLinkedList();
 }
 
 // menghapus baris yang diinginkan
 void TextEditor::removeLine() {
-    readFile();
-    int ch;
-    cout << "Insert number of line to remove: ";
+    readFileEdit();
+    int ch, count = 1;
+    cout << "Enter the line number to remove: ";
     cin >> ch;
+
+    cur = head;
+    del = nullptr;
+    bool found = false;
+    if (ch == 1) {
+        head = head->next;
+        delete cur;
+        found = true;
+    } else {
+        while (cur != nullptr && count < ch - 1) {
+            cur = cur->next;
+            count++;
+        }
+
+        if (cur != nullptr && cur->next != nullptr) {
+            del = cur->next;
+            cur->next = del->next;
+            delete del;
+            found = true;
+        }
+    }
+
+    if (found) {
+        // Tulis ulang isi file
+        printLinkedList();
+        cout << "Line successfully removed." << endl;
+        readFile();
+    } else {
+        cout << "Line not found." << endl;
+    }
 }
+
+
 
 // fungsi untuk mengprint linked list ke output
 void TextEditor::printLinkedList() {
     ofile.open(file_Name);
-    cout << "ini tes printLinkedList dari file: " << file_Name << endl;
-    cin.ignore();
+    // cin.ignore();
     int i = 1; // untuk menghindari enter di akhir file output
     cur = head;
-    
     while (cur != nullptr) {
         if (i == 1) {
             ofile << cur->line;
@@ -188,10 +247,10 @@ void TextEditor::printLinkedList() {
             ofile << endl << cur->line;
             cur = cur->next;
         }
-    }
-    
+    }    
     ofile.close();
-    // removeLinkedList();
+    removeLinkedList(head);
+    cout << endl;
 }
 
 
@@ -276,15 +335,18 @@ int main() {
                 cin >> file_Name;
                 system("CLS");
                 TextEditor myText(file_Name);
-                myText.modifyLine();
+                myText.readFileEdit();
+                myText.modifyFile();
+                // myText.printLinkedList();
                 system("pause");
                 break;
             }
 
-            case 4:
+            case 4: {
+            }
             break;
 
-            case 5:
+            case 0:
                 breakingPoint = false;
             break;
 

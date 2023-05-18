@@ -122,15 +122,15 @@ int main()
     cout << endl << endl << endl;
     removeFirst();
     printSingleLinkedList();
-    cout << endl << endl << endl;
-    addLast("asaasdfw24", "124231sadf", 201212);
-    printSingleLinkedList();
-    removeLast();
-    cout << endl << endl << endl;
-    printSingleLinkedList();
-    cout << endl << endl << endl;
-    changeFirst("Kastaadf", "gesadfooo", 2000);
-    printSingleLinkedList();
+    // cout << endl << endl << endl;
+    // addLast("asaasdfw24", "124231sadf", 201212);
+    // printSingleLinkedList();
+    // removeLast();
+    // cout << endl << endl << endl;
+    // printSingleLinkedList();
+    // cout << endl << endl << endl;
+    // changeFirst("Kastaadf", "gesadfooo", 2000);
+    // printSingleLinkedList();
 
     return 0;
 }   
