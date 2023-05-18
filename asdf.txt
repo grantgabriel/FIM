@@ -1,4 +1,8 @@
+hehe
+ini penambahan setelah di line 2 atau setelah?
 asdfsd
 fweeasd
-asdfsdfsadf
+ini line 4, kenapa spasi gaada
 ssafd
+setelah
+ini setelah 6 dan harus 7

@@ -77,13 +77,16 @@ class TextEditor {
         // linkedlist
             void createLineLinkedList(string); // untuk membaca baris pertama file, lalu memasukkannya sebagai linked list yang pertama dibuat
             void addFirstLine(string); // untuk menambahkan node sebagai node paling awal dari linkedlist
+            void addMiddleLine(string, int);
             void addLastLine(string); // untuk menambahkan node sebagai node yang paling terakhir dari linked list
             void removeLinkedList(Filenote*&); // untuk menghapus semua node linkedlist
             void printLinkedList(); // untuk output linkedlist setiap melakukan edit file
+            int countLinkedList();
         // memodifikasi
             void modifyFile(); // editLine berhubungan dengan edit line
             void editLine(int); // editLine membutuhkan parameter dari modifyFile
             void readFileEdit(); //untuk membaca file lalu memasukkan barisnya ke dalam linked list
+            void addline();
             void removeLine(); // untuk menghapus baris dari file yang diinginkan
         ~TextEditor(){};
 };
@@ -102,6 +105,20 @@ void TextEditor::addFirstLine(string line){
     head = newNode;
 }
 
+void TextEditor::addMiddleLine(string line, int position) {
+    newNode = new Filenote();
+    newNode->line = line;
+    cur = head;
+    int count = 1;
+    while (count < position - 1)
+    {
+        cur = cur->next;
+        count++;
+    }
+    newNode->next = cur->next;
+    cur->next = newNode;
+}
+
 void TextEditor::addLastLine(string line){
     newNode = new Filenote();
     newNode->line = line;
@@ -116,6 +133,17 @@ void TextEditor::addLastLine(string line){
     }
 }
 
+int TextEditor::countLinkedList(){
+    cur = head;
+    int count = 1;
+    while (cur->next != nullptr)
+    {
+        cur = cur->next;
+        count++;
+    }
+    return count;
+}
+
 void TextEditor::modifyFile(){
     readFile();
     int ch, userChEdit = editMenu();
@@ -126,9 +154,10 @@ void TextEditor::modifyFile(){
     switch (userChEdit)
     {
         case 1:
+            addline();
             break;
         case 2:
-            cout << "Insert line number to edit: ";
+            cout << "Enter which line number you want to edit: ";
             cin >> ch;
             editLine(ch);
             break;
@@ -136,14 +165,12 @@ void TextEditor::modifyFile(){
             removeLine();
             break;
         case 0:
-            menu;
+            menu();
             return;
             break;
         default:
             break;
     }
-    // printLinkedList();
-    // system("pause");
 }
 
 void TextEditor::readFileEdit() {
@@ -169,6 +196,29 @@ void TextEditor::readFileEdit() {
     }
 }
 
+void TextEditor::addline()
+{
+    readFileEdit();
+    int ch;
+    string newLine;
+    cout << "Enter which line number you want to add: ";
+    cin >> ch;
+    cout << "Insert the new line: ";
+    cin.ignore();
+    getline(cin, newLine);
+    if (ch == 1)
+    {
+        addFirstLine(newLine);
+    } else if (ch > 1 && ch < countLinkedList()){
+        addMiddleLine(newLine, ch);
+    } else if (ch == countLinkedList()) {
+        addLastLine(newLine);
+    } else {
+        cout << "Failed to add line, are you sure you add at valid line?" << endl;
+        cout << "You can add line between 1-" << countLinkedList() << " only!";
+    }
+    printLinkedList();
+}
 
 void TextEditor::editLine(int ch){
     cur = head;
@@ -196,7 +246,7 @@ void TextEditor::editLine(int ch){
 void TextEditor::removeLine() {
     readFileEdit();
     int ch, count = 1;
-    cout << "Enter the line number to remove: ";
+    cout << "Enter the line number you want to remove: ";
     cin >> ch;
 
     cur = head;
@@ -312,7 +362,8 @@ int main() {
             case 1: {
                 string file_Name;
                 cout << "Enter a file name and its coresponding extension : ";
-                cin >> file_Name;
+                cin.ignore();
+                getline(cin, file_Name);
                 system("CLS");
                 TextEditor myText(file_Name);
                 myText.writeFile();
@@ -322,7 +373,8 @@ int main() {
             case 2: {
                 string file_Name;
                 cout << "Enter the name file and its extension to open : ";
-                cin >> file_Name;
+                cin.ignore();
+                getline(cin, file_Name);
                 system("CLS");
                 TextEditor myText(file_Name);
                 myText.readFile();
@@ -332,12 +384,12 @@ int main() {
             case 3: {
                 string file_Name;
                 cout << "Enter the name file and its extension to open : ";
-                cin >> file_Name;
+                cin.ignore();
+                getline(cin, file_Name);
                 system("CLS");
                 TextEditor myText(file_Name);
                 myText.readFileEdit();
                 myText.modifyFile();
-                // myText.printLinkedList();
                 system("pause");
                 break;
             }
