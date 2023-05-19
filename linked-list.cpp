@@ -56,7 +56,15 @@ void addMidle(string judul, string pengarang, int tB, int posisi)
 
     // transversing
     cur = head;
-     
+    int count = 1;
+    while (count < posisi - 1)
+    {
+        cur = cur->next;
+        count++;
+    }
+    
+    newNode->next = cur->next;
+    cur->next = newNode;
 }
 
 // remove first
@@ -114,23 +122,26 @@ int main()
     createSingleLinkedList("Mata", "Geez & aAn", 2018);
     printSingleLinkedList();
     cout << endl << endl << endl;
-    addFirst("Mata", "Geez ", 2012);
+    addFirst("Mata", "Gaadsfez ", 2012);
     printSingleLinkedList();
+    // cout << endl << endl << endl;
+    // addLast("asata", "asdfasdf", 2013);
+    // printSingleLinkedList();
+    // cout << endl << endl << endl;
+    // removeFirst();
+    // printSingleLinkedList();
     cout << endl << endl << endl;
-    addLast("asata", "asdfasdf", 2013);
+    addMidle("asata", "asdf", 2013, 2);
     printSingleLinkedList();
-    cout << endl << endl << endl;
-    removeFirst();
-    printSingleLinkedList();
-    cout << endl << endl << endl;
-    addLast("asaasdfw24", "124231sadf", 201212);
-    printSingleLinkedList();
-    removeLast();
-    cout << endl << endl << endl;
-    printSingleLinkedList();
-    cout << endl << endl << endl;
-    changeFirst("Kastaadf", "gesadfooo", 2000);
-    printSingleLinkedList();
+    // cout << endl << endl << endl;
+    // addLast("asaasdfw24", "124231sadf", 201212);
+    // printSingleLinkedList();
+    // removeLast();
+    // cout << endl << endl << endl;
+    // printSingleLinkedList();
+    // cout << endl << endl << endl;
+    // changeFirst("Kastaadf", "gesadfooo", 2000);
+    // printSingleLinkedList();
 
     return 0;
 }   
