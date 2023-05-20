@@ -1,9 +1,27 @@
+/******************************************
+*                                         *
+*    A C++, Terminal Based Text Editor    *
+*                                         *
+*            By Us, the Group             *
+*                                         *
+******************************************/
+
+// Group member = () =>
+
+// -> Grant Gabriel Tambunan (221402057)
+// -> R Khairu Wahyutama (221402051)
+// -> Khalil Ramzy (221402110)
+// -> Jeremy Sharon (221402107)
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <string>
 using namespace std;
 
+// {{ Public Function Start }}
+
+// Menu function for UI
 int menu() {
     int choice;
 
@@ -20,6 +38,8 @@ int menu() {
     cout << "2. Read and open from an existing file" << endl;
     cout << "3. Edit a line from a file" << endl;
     cout << "4. Delete file" << endl;
+    cout << "5. Compile code (C++)" << endl;
+    cout << "6. Run an app file" << endl;
     cout << "0. Exit\n";
     cout << "Enter your choice . . .    ";
     cin >> choice;
@@ -27,7 +47,8 @@ int menu() {
     return choice;
 }
 
-int editMenu (){
+// A function for choices around edit.
+int editMenu () {
     int choice;
     cout << "1. Add new line" << endl;
     cout << "2. Edit Line"  << endl;
@@ -39,6 +60,9 @@ int editMenu (){
     return choice;
 }
 
+// {{ Public Function Start }}
+
+// {{ Linkedlist For Edit Start }}
 struct Filenote {
     string line;
     Filenote* next;
@@ -50,19 +74,21 @@ bool isTailPosition(Filenote* head, int position) {
     cur = head;
     int length = 0;
 
-    // Menghitung panjang linked list
+    // Count the length of the linkedlist
     while (cur != nullptr) {
         length++;
         cur = cur->next;
     }
 
-    // Mengecek apakah posisi merupakan tail
+    // Check whether the position is the tail.
     if (position == length - 1) {
         return true;
     } else {
         return false;
     }
 }
+
+// {{ Linkedlist For Edit End }}
 
 class TextEditor {
     private:
@@ -71,26 +97,34 @@ class TextEditor {
         ifstream ifile;
         
     public: 
-        TextEditor(string file_Name = "file.txt") {this->file_Name = file_Name;}
-        void writeFile();
-        void readFile();
-        // linkedlist
-            void createLineLinkedList(string); // untuk membaca baris pertama file, lalu memasukkannya sebagai linked list yang pertama dibuat
-            void addFirstLine(string); // untuk menambahkan node sebagai node paling awal dari linkedlist
+        TextEditor(string file_Name = "file.txt") {this->file_Name = file_Name;} // Constructor
+        // Default function (Create and read)
+            void writeFile();
+            void readFile();
+
+        // Edit function /w linkedlists
+            void createLineLinkedList(string); 
+            void addFirstLine(string);
             void addMiddleLine(string, int);
-            void addLastLine(string); // untuk menambahkan node sebagai node yang paling terakhir dari linked list
-            void removeLinkedList(Filenote*&); // untuk menghapus semua node linkedlist
-            void printLinkedList(); // untuk output linkedlist setiap melakukan edit file
+            void addLastLine(string); 
+            void removeLinkedList(Filenote*&);
+            void printLinkedList();
             int countLinkedList();
-        // memodifikasi
-            void modifyFile(); // editLine berhubungan dengan edit line
-            void editLine(int); // editLine membutuhkan parameter dari modifyFile
-            void readFileEdit(); //untuk membaca file lalu memasukkan barisnya ke dalam linked list
+            
+        // Modify (Edit and Delete) and run it.
+            void modifyFile(); 
+            void editLine(int); 
+            void readFileEdit(); 
             void addline();
-            void removeLine(); // untuk menghapus baris dari file yang diinginkan
-        ~TextEditor(){};
+            void removeLine(); 
+            void deleteFile();
+            void compileCode();
+            void runCode(const std::string&);
+
+        ~TextEditor(){}; // Destructors
 };
 
+// To read the first line of the file, and then insert it into the linkedlist.
 void TextEditor::createLineLinkedList(string line) {
     head = new Filenote();
     head->line = line;
@@ -98,6 +132,7 @@ void TextEditor::createLineLinkedList(string line) {
     tail = head;
 }
 
+// To add node as the first node of the linkedlist.
 void TextEditor::addFirstLine(string line){
     newNode = new Filenote();
     newNode->line = line;
@@ -105,6 +140,7 @@ void TextEditor::addFirstLine(string line){
     head = newNode;
 }
 
+// To add a new line at the middle of a file.
 void TextEditor::addMiddleLine(string line, int position) {
     newNode = new Filenote();
     newNode->line = line;
@@ -119,6 +155,7 @@ void TextEditor::addMiddleLine(string line, int position) {
     cur->next = newNode;
 }
 
+// To add a line at the last line of the text
 void TextEditor::addLastLine(string line){
     newNode = new Filenote();
     newNode->line = line;
@@ -133,6 +170,7 @@ void TextEditor::addLastLine(string line){
     }
 }
 
+// Just to count all the node on the linkedlist.
 int TextEditor::countLinkedList(){
     cur = head;
     int count = 1;
@@ -147,10 +185,7 @@ int TextEditor::countLinkedList(){
 void TextEditor::modifyFile(){
     readFile();
     int ch, userChEdit = editMenu();
-    /* 
-        aku mau buat menu untuk modify line, yang mana isinya;
-        mengedit line sesuai pilihan, remove line, tambah line
-     */
+
     switch (userChEdit)
     {
         case 1:
@@ -179,17 +214,20 @@ void TextEditor::readFileEdit() {
     ifile.open(file_Name);
     if (ifile.is_open()) {
         int iterator = 1;
+
         while (!ifile.eof()) {
             getline(ifile, line);
             if (iterator == 1) {
                 createLineLinkedList(line);
-            }
-            else {
+            } else {
                 addLastLine(line);
             }
+
             iterator++;
         }
+
         ifile.close();
+
     } else {
         cout << "Failed to open the file." << endl;
         return;
@@ -206,29 +244,30 @@ void TextEditor::addline()
     cout << "Insert the new line: ";
     cin.ignore();
     getline(cin, newLine);
-    if (ch == 1)
-    {
+
+    if (ch == 1) 
         addFirstLine(newLine);
-    } else if (ch > 1 && ch < countLinkedList()){
+    else if (ch > 1 && ch < countLinkedList())
         addMiddleLine(newLine, ch);
-    } else if (ch == countLinkedList()) {
+    else if (ch == countLinkedList())
         addLastLine(newLine);
-    } else {
+    else {
         cout << "Failed to add line, are you sure you add at valid line?" << endl;
         cout << "You can add line between 1-" << countLinkedList() << " only!";
     }
+
     printLinkedList();
 }
 
 void TextEditor::editLine(int ch){
     cur = head;
     int count = 1;
-    // untuk mencari baris yang akan diedit
+    // To find the line we want to edit.
     while (cur != nullptr && count < ch){
         cur = cur ->next;
         count++;
     }
-    // jika tidak ditemukan akan mereturn
+    // If not found, it will exit by returning nothing.
     if (cur == nullptr){
         cout << "Line not found" << endl;
         return;
@@ -242,7 +281,7 @@ void TextEditor::editLine(int ch){
     printLinkedList();
 }
 
-// menghapus baris yang diinginkan
+// Delete a selected line
 void TextEditor::removeLine() {
     readFileEdit();
     int ch, count = 1;
@@ -271,7 +310,7 @@ void TextEditor::removeLine() {
     }
 
     if (found) {
-        // Tulis ulang isi file
+        // Rewrite all the file.
         printLinkedList();
         cout << "Line successfully removed." << endl;
         readFile();
@@ -280,14 +319,12 @@ void TextEditor::removeLine() {
     }
 }
 
-
-
-// fungsi untuk mengprint linked list ke output
+// Function to print the linkedlist into the file.
 void TextEditor::printLinkedList() {
     ofile.open(file_Name);
-    // cin.ignore();
-    int i = 1; // untuk menghindari enter di akhir file output
+    int i = 1; // To prevent an unwanted <ENTER> at the last line.
     cur = head;
+
     while (cur != nullptr) {
         if (i == 1) {
             ofile << cur->line;
@@ -298,13 +335,14 @@ void TextEditor::printLinkedList() {
             cur = cur->next;
         }
     }    
+
     ofile.close();
     removeLinkedList(head);
     cout << endl;
 }
 
 
-// menghapus semua linkedlist
+// Remove all linkedlist
 void TextEditor::removeLinkedList(Filenote*& head) {
     cur = head;
     nextNode = nullptr;
@@ -318,6 +356,7 @@ void TextEditor::removeLinkedList(Filenote*& head) {
     head = nullptr;
 }
 
+// Function to read all line in a file.
 void TextEditor::readFile() {
     int iterator = 1;
     string line;
@@ -332,12 +371,13 @@ void TextEditor::readFile() {
     system("pause");
 }
 
+// Function to write a file.
 void TextEditor::writeFile() {
     string line;
     ofile.open(file_Name);
-
-    cin.ignore();
-    int i = 1; // Untuk menghindari enter enter pertama pada input txt
+    
+    cout << "Write your file, end it with \"END.\"" << endl;
+    int i = 1; // To prevent an unwanted <ENTER> in the first line of the file.
     while(line != "END.") {
         getline(cin, line);        
         
@@ -350,6 +390,32 @@ void TextEditor::writeFile() {
         } else 
             ofile << endl << line ;
     }
+}
+
+// Function to delete a file.
+void TextEditor::deleteFile() {
+    const char* c_filename = file_Name.c_str();
+
+    // Remove the file using remove() function from <cstdio>
+    if (remove(c_filename) == 0)
+        cout << "File '" << file_Name << "' deleted successfully.\n";
+    else
+        cout << "Failed to delete file '" << file_Name << "'.\n";
+    
+}
+
+// Function to compile a C++ file
+void TextEditor::compileCode() {
+    // Build the compilation command
+    string command = "g++ -o " + file_Name.substr(0, file_Name.find_last_of('.')) + " " + file_Name;
+
+    // Execute the compilation command using system()
+    int result = system(command.c_str());
+
+    if (result == 0)
+        cout << "Code compiled successfully.\n";
+    else
+        cout << "Compilation failed.\n";
 }
 
 int main() {
@@ -395,8 +461,37 @@ int main() {
             }
 
             case 4: {
+                string file_Name;
+                cout << "Enter the name file and its extension to delete : ";
+                cin.ignore();
+                getline(cin, file_Name);
+                system("CLS");
+                TextEditor myText(file_Name);
+                myText.deleteFile();
+                break;
             }
-            break;
+            
+            case 5: {
+                string file_Name;
+                cout << "Enter the name file and its extension to compile (CPP only) : ";
+                cin.ignore();
+                getline(cin, file_Name);
+                TextEditor myText(file_Name);
+                myText.compileCode();
+                break;
+            }
+
+            case 6: {
+                string file_Name;
+                cout << "Enter the app file name to run : ";
+                cin.ignore();
+                getline(cin, file_Name);
+                system("CLS");
+                system(file_Name.c_str());
+                cout << endl;
+                system("PAUSE");
+                break;
+            }
 
             case 0:
                 breakingPoint = false;
