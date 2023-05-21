@@ -81,11 +81,15 @@ bool isTailPosition(Filenote* head, int position) {
     }
 
     // Check whether the position is the tail.
+<<<<<<< HEAD
     if (position == length - 1) {
+=======
+    if (position == length - 1) 
+>>>>>>> f8ca1167cf6b11c2bca670e4fdba60dd100c43b1
         return true;
-    } else {
+    else 
         return false;
-    }
+    
 }
 
 // {{ Linkedlist For Edit End }}
@@ -100,7 +104,11 @@ class TextEditor {
         TextEditor(string file_Name = "file.txt") {this->file_Name = file_Name;} // Constructor
         // Default function (Create and read)
             void writeFile();
+<<<<<<< HEAD
             void readFile();
+=======
+            bool readFile();
+>>>>>>> f8ca1167cf6b11c2bca670e4fdba60dd100c43b1
 
         // Edit function /w linkedlists
             void createLineLinkedList(string); 
@@ -146,8 +154,7 @@ void TextEditor::addMiddleLine(string line, int position) {
     newNode->line = line;
     cur = head;
     int count = 1;
-    while (count < position - 1)
-    {
+    while (count < position - 1){
         cur = cur->next;
         count++;
     }
@@ -174,8 +181,7 @@ void TextEditor::addLastLine(string line){
 int TextEditor::countLinkedList(){
     cur = head;
     int count = 1;
-    while (cur->next != nullptr)
-    {
+    while (cur->next != nullptr){
         cur = cur->next;
         count++;
     }
@@ -183,6 +189,7 @@ int TextEditor::countLinkedList(){
 }
 
 void TextEditor::modifyFile(){
+<<<<<<< HEAD
     readFile();
     int ch, userChEdit = editMenu();
 
@@ -205,6 +212,38 @@ void TextEditor::modifyFile(){
             break;
         default:
             break;
+=======
+    if (readFile()) {
+        bool breakPoint = true;
+        while (breakPoint){
+            readFileEdit();
+            int ch, userChEdit = editMenu();
+            switch (userChEdit){
+                case 1:
+                    addline();
+                    break;
+                case 2:
+                    cout << "Enter which line number you want to edit: ";
+                    cin >> ch;
+                    editLine(ch);
+                    break;
+                case 3:
+                    removeLine();
+                    break;
+                case 0:
+                    breakPoint = false;
+                    break;
+                default:
+                    break;
+            }
+            if (breakPoint){
+                system("CLS");
+                readFile();
+            }
+            
+        }
+        system("PAUSE");
+>>>>>>> f8ca1167cf6b11c2bca670e4fdba60dd100c43b1
     }
 }
 
@@ -217,12 +256,18 @@ void TextEditor::readFileEdit() {
 
         while (!ifile.eof()) {
             getline(ifile, line);
-            if (iterator == 1) {
+            if (iterator == 1) 
                 createLineLinkedList(line);
+<<<<<<< HEAD
             } else {
                 addLastLine(line);
             }
 
+=======
+            else 
+                addLastLine(line);
+            
+>>>>>>> f8ca1167cf6b11c2bca670e4fdba60dd100c43b1
             iterator++;
         }
 
@@ -230,7 +275,6 @@ void TextEditor::readFileEdit() {
 
     } else {
         cout << "Failed to open the file." << endl;
-        return;
     }
 }
 
@@ -254,12 +298,14 @@ void TextEditor::addline()
     else {
         cout << "Failed to add line, are you sure you add at valid line?" << endl;
         cout << "You can add line between 1-" << countLinkedList() << " only!";
+        system("PAUSE");
     }
 
     printLinkedList();
 }
 
 void TextEditor::editLine(int ch){
+    // cout << head->line << endl;
     cur = head;
     int count = 1;
     // To find the line we want to edit.
@@ -270,15 +316,17 @@ void TextEditor::editLine(int ch){
     // If not found, it will exit by returning nothing.
     if (cur == nullptr){
         cout << "Line not found" << endl;
+        system("PAUSE");
         return;
+    } else {
+        string newLine;
+        cout << "Insert the new content: ";
+        cin.ignore();
+        getline(cin, newLine);
+        cur->line = newLine;
+        printLinkedList();
+        system("PAUSE");
     }
-    
-    string newLine;
-    cout << "Insert the new content: ";
-    cin.ignore();
-    getline(cin, newLine);
-    cur->line = newLine;
-    printLinkedList();
 }
 
 // Delete a selected line
@@ -313,9 +361,10 @@ void TextEditor::removeLine() {
         // Rewrite all the file.
         printLinkedList();
         cout << "Line successfully removed." << endl;
-        readFile();
+        system("PAUSE");
     } else {
         cout << "Line not found." << endl;
+        system("PAUSE");
     }
 }
 
@@ -357,18 +406,30 @@ void TextEditor::removeLinkedList(Filenote*& head) {
 }
 
 // Function to read all line in a file.
+<<<<<<< HEAD
 void TextEditor::readFile() {
+=======
+bool TextEditor::readFile() {
+>>>>>>> f8ca1167cf6b11c2bca670e4fdba60dd100c43b1
     int iterator = 1;
     string line;
 
     ifile.open(file_Name);
-
-    while(!ifile.eof()) {
-        getline(ifile, line);
-        cout << "\033[34m" << std::setw(3) << iterator << " " << "\033[37m" << line << endl;
-        iterator++;
+    if (ifile.is_open()){
+        while(!ifile.eof()) {
+            getline(ifile, line);
+            cout << "\033[34m" << std::setw(3) << iterator << " " << "\033[37m" << line << endl;
+            iterator++;
+        }
+        ifile.close();
+        system("PAUSE");
+        return true;
     }
-    system("pause");
+    else {
+        cout << "Failed to open the file." << endl;
+        system("PAUSE");    
+        return false;
+    }
 }
 
 // Function to write a file.
@@ -416,6 +477,10 @@ void TextEditor::compileCode() {
         cout << "Code compiled successfully.\n";
     else
         cout << "Compilation failed.\n";
+<<<<<<< HEAD
+=======
+    system("PAUSE");
+>>>>>>> f8ca1167cf6b11c2bca670e4fdba60dd100c43b1
 }
 
 int main() {
@@ -454,9 +519,7 @@ int main() {
                 getline(cin, file_Name);
                 system("CLS");
                 TextEditor myText(file_Name);
-                myText.readFileEdit();
                 myText.modifyFile();
-                system("pause");
                 break;
             }
 
@@ -468,6 +531,10 @@ int main() {
                 system("CLS");
                 TextEditor myText(file_Name);
                 myText.deleteFile();
+<<<<<<< HEAD
+=======
+                system("PAUSE");
+>>>>>>> f8ca1167cf6b11c2bca670e4fdba60dd100c43b1
                 break;
             }
             
