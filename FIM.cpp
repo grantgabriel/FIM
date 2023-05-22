@@ -133,7 +133,7 @@ void TextEditor::createLineLinkedList(string line) {
 }
 
 // To add node as the first node of the linkedlist.
-void TextEditor::addFirstLine(string line){
+void TextEditor::addFirstLine(string line) {
     newNode = new Filenote();
     newNode->line = line;
     newNode->next = head;
@@ -146,7 +146,7 @@ void TextEditor::addMiddleLine(string line, int position) {
     newNode->line = line;
     cur = head;
     int count = 1;
-    while (count < position - 1){
+    while (count < position - 1) {
         cur = cur->next;
         count++;
     }
@@ -155,7 +155,7 @@ void TextEditor::addMiddleLine(string line, int position) {
 }
 
 // To add a line at the last line of the text
-void TextEditor::addLastLine(string line){
+void TextEditor::addLastLine(string line) {
     newNode = new Filenote();
     newNode->line = line;
     newNode->next = nullptr;
@@ -170,10 +170,10 @@ void TextEditor::addLastLine(string line){
 }
 
 // Just to count all the node on the linkedlist.
-int TextEditor::countLinkedList(){
+int TextEditor::countLinkedList() {
     cur = head;
     int count = 1;
-    while (cur->next != nullptr){
+    while (cur->next != nullptr) {
         cur = cur->next;
         count++;
     }
@@ -183,10 +183,10 @@ int TextEditor::countLinkedList(){
 void TextEditor::modifyFile(){
     if (readFile()) {
         bool breakPoint = true;
-        while (breakPoint){
+        while (breakPoint) {
             readFileEdit();
             int ch, userChEdit = editMenu();
-            switch (userChEdit){
+            switch (userChEdit) {
                 case 1:
                     addline();
                     break;
@@ -204,7 +204,7 @@ void TextEditor::modifyFile(){
                 default:
                     break;
             }
-            if (breakPoint){
+            if (breakPoint) {
                 system("CLS");
                 readFile();
             }
@@ -236,8 +236,7 @@ void TextEditor::readFileEdit() {
     }
 }
 
-void TextEditor::addline()
-{
+void TextEditor::addline() {
     readFileEdit();
     int ch;
     string newLine;
@@ -262,8 +261,7 @@ void TextEditor::addline()
     printLinkedList();
 }
 
-void TextEditor::editLine(int ch){
-    // cout << head->line << endl;
+void TextEditor::editLine(int ch) {
     cur = head;
     int count = 1;
     // To find the line we want to edit.
@@ -272,7 +270,7 @@ void TextEditor::editLine(int ch){
         count++;
     }
     // If not found, it will exit by returning nothing.
-    if (cur == nullptr){
+    if (cur == nullptr) {
         cout << "Line not found" << endl;
         system("PAUSE");
         return;
@@ -369,7 +367,7 @@ bool TextEditor::readFile() {
     string line;
 
     ifile.open(file_Name);
-    if (ifile.is_open()){
+    if (ifile.is_open()) {
         while(!ifile.eof()) {
             getline(ifile, line);
             cout << "\033[34m" << std::setw(3) << iterator << " " << "\033[37m" << line << endl;
@@ -399,7 +397,7 @@ void TextEditor::writeFile() {
         if(line == "END.")
             break;
 
-        if (i == 1){
+        if (i == 1) {
             ofile << line;
             i++;
         } else 
