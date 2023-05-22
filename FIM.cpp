@@ -70,24 +70,6 @@ struct Filenote {
 
 Filenote *head = NULL, *tail = NULL, *cur, *newNode, *nextNode, *del;
 
-bool isTailPosition(Filenote* head, int position) {
-    cur = head;
-    int length = 0;
-
-    // Count the length of the linkedlist
-    while (cur != nullptr) {
-        length++;
-        cur = cur->next;
-    }
-
-    // Check whether the position is the tail.
-    if (position == length - 1) 
-        return true;
-    else 
-        return false;
-    
-}
-
 // {{ Linkedlist For Edit End }}
 
 class TextEditor {
