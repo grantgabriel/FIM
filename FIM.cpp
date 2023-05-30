@@ -29,7 +29,7 @@ int menu() {
     cout << "\033[34m";
     cout << "\t\t\t\t\t\t\t  FIM - Fi IMproved" << endl;
     cout << "\033[32m";
-    cout << "\t\t\t\t\t\t\t    Version 1.0.0\n" << endl;
+    cout << "\t\t\t\t\t\t\t    Version 1.0.1\n" << endl;
     cout << "\033[33m";
     cout << "\t\t\t\t\t     FIM is open source and freely distributed." << endl;
     cout << "\t\t\t\t\t        Feel free to check our github repos!\n" << "\n" << endl;
