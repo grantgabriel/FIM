@@ -60,6 +60,17 @@ int editMenu () {
     return choice;
 }
 
+// Function to ask a file name to open.
+string askFileName () {
+    string fileName;
+    cout << "Enter the name file and its extension to open : ";
+    cin.ignore();
+    getline(cin, fileName);
+    system("CLS");
+
+    return fileName;
+}
+
 // {{ Public Function End }}
 
 // {{ Linkedlist For Edit Start }}
@@ -436,22 +447,14 @@ int main() {
             };
 
             case 2: {
-                string file_Name;
-                cout << "Enter the name file and its extension to open : ";
-                cin.ignore();
-                getline(cin, file_Name);
-                system("CLS");
+                string file_Name = askFileName();
                 TextEditor myText(file_Name);
                 myText.readFile();
                 break;
             }
 
             case 3: {
-                string file_Name;
-                cout << "Enter the name file and its extension to open : ";
-                cin.ignore();
-                getline(cin, file_Name);
-                system("CLS");
+                string file_Name = askFileName();
                 TextEditor myText(file_Name);
                 myText.modifyFile();
                 break;
