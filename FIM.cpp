@@ -47,7 +47,7 @@ int menu() {
     return choice;
 }
 
-// A function for choices around edit.
+// A menu function for choices around edit.
 int editMenu () {
     int choice;
     cout << "1. Add new line" << endl;
@@ -63,6 +63,7 @@ int editMenu () {
 // {{ Public Function End }}
 
 // {{ Linkedlist For Edit Start }}
+
 struct Filenote {
     string line;
     Filenote* next;
@@ -162,6 +163,7 @@ int TextEditor::countLinkedList() {
     return count;
 }
 
+// A function around modifying a file.
 void TextEditor::modifyFile(){
     if (readFile()) {
         bool breakPoint = true;
@@ -218,6 +220,7 @@ void TextEditor::readFileEdit() {
     }
 }
 
+// An function to add a string into any line wanted.
 void TextEditor::addline() {
     readFileEdit();
     int ch;
@@ -247,7 +250,7 @@ void TextEditor::editLine(int ch) {
     cur = head;
     int count = 1;
     // To find the line we want to edit.
-    while (cur != nullptr && count < ch){
+    while (cur != nullptr && count < ch) {
         cur = cur ->next;
         count++;
     }
@@ -312,7 +315,7 @@ void TextEditor::printLinkedList() {
     int i = 1; // To prevent an unwanted <ENTER> at the last line.
     cur = head;
 
-    while (cur != nullptr) {
+    while (cur != nullptr) { 
         if (i == 1) {
             ofile << cur->line;
             cur = cur->next;
@@ -329,7 +332,7 @@ void TextEditor::printLinkedList() {
 }
 
 
-// Remove all linkedlist
+// Remove all linkedlist for saving memory.
 void TextEditor::removeLinkedList(Filenote*& head) {
     cur = head;
     nextNode = nullptr;
@@ -489,7 +492,7 @@ int main() {
             }
 
             case 0:
-                breakingPoint = false;
+                breakingPoint = false; // Exit condition
             break;
 
             default:                
