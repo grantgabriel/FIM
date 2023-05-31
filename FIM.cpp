@@ -2,22 +2,31 @@
 *                                         *
 *    A C++, Terminal Based Text Editor    *
 *                                         *
-*            By Us, the Group             *
+*              By Us, Group 1             *
 *                                         *
 ******************************************/
 
-// Group member = () =>
+// Group member = (Main Contributor) =>
 
 // -> R Khairu Wahyutama (221402051)
 // -> Grant Gabriel Tambunan (221402057)
 // -> Khalil Ramzy (221402110)
 // -> Jeremy Sharon (221402107)
 
+/* For more documentation, please check out our github! */
+// {{ https://github.com/grantgabriel/FIM }} 
+
+// Feel free to make a pull request or ask for contribution, we'll be happy to check it out! 
+
+// {{ Library and package declaration start }}
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <string>
 using namespace std;
+
+// {{ Library and package declaration start }}
 
 // {{ Public Function Start }}
 
@@ -174,7 +183,7 @@ int TextEditor::countLinkedList() {
     return count;
 }
 
-
+// Module to open an file and insert it into the linkedlist for editing.
 void TextEditor::readFileEdit() {
     string line;
 
@@ -198,7 +207,7 @@ void TextEditor::readFileEdit() {
     }
 }
 
-// A function around modifying a file.
+// A menu controller function around modifying a file.
 void TextEditor::modifyFile() {
     if (readFile()) {
         bool breakPoint = true;
@@ -372,7 +381,7 @@ bool TextEditor::readFile() {
     if (ifile.is_open()) {
         while(!ifile.eof()) {
             getline(ifile, line);
-            cout << "\033[34m" << std::setw(3) << iterator << " " << "\033[37m" << line << endl;
+            cout << "\033[34m" << std::setw(3) << iterator << "| " << "\033[37m" << line << endl;
             iterator++;
         }
         
