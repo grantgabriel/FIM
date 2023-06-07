@@ -1,5 +1,5 @@
 /******************************************
-*                                         *
+*                                         * 
 *    A C++, Terminal Based Text Editor    *
 *                                         *
 *              By Us, Group 1             *
@@ -18,7 +18,7 @@
 
 // Feel free to make a pull request or ask for contribution, we'll be happy to check it out! 
 
-// {{ Library and package declaration start }}
+// {{ Library, package and defining declaration start }}
 
 #include <iostream>
 #include <iomanip>
@@ -26,7 +26,19 @@
 #include <string>
 using namespace std;
 
-// {{ Library and package declaration start }}
+#define RESET_TEXT "\033[0m"	     // Reset special formatting (such as colour).
+#define BLACK_TEXT "\033[30m"	     // Black text.
+#define RED_TEXT "\033[31m"	         // Red text.
+#define GREEN_TEXT "\033[32m"	     // Green text.
+#define YELLOW_TEXT "\033[33m"	     // Yellow text.
+#define BLUE_TEXT "\033[34m"	     // Blue text.
+#define MAGENTA_TEXT "\033[35m"	     // Magenta text.
+#define CYAN_TEXT "\033[36m"	     // Cyan text.
+#define WHITE_TEXT "\033[37m"	     // White text.
+#define WHITE_BACKGROUND "\033[47m"  // White background.
+#define BLACK_BACKGROUND "\033[40m"  // Black background.
+
+// {{ Library, package and defining declaration start }}
 
 // {{ Public Function Start }}
 
@@ -35,22 +47,23 @@ int menu() {
     int choice;
 
     system("CLS");
-    cout << "\033[34m";
+    cout << BLUE_TEXT;
     cout << "\t\t\t\t\t\t\t  FIM - Fi IMproved" << endl;
-    cout << "\033[32m";
+    cout << GREEN_TEXT;
     cout << "\t\t\t\t\t\t\t    Version 1.0.1\n" << endl;
-    cout << "\033[33m";
+    cout << YELLOW_TEXT;
     cout << "\t\t\t\t\t     FIM is open source and freely distributed." << endl;
     cout << "\t\t\t\t\t        Feel free to check our github repos!\n" << "\n" << endl;
-    cout << "\033[37m";
-    cout << "1. Create a new file" << endl;
-    cout << "2. Read and open from an existing file" << endl;
-    cout << "3. Edit a line from a file" << endl;
-    cout << "4. Delete file" << endl;
-    cout << "5. Compile code (C++)" << endl;
-    cout << "6. Run an app file" << endl;
-    cout << "0. Exit\n";
-    cout << "Enter your choice . . .    ";
+    cout << WHITE_TEXT;
+    cout << "1. Create a new file                   " << endl;
+    cout << "2. Read and open from an existing file " << endl;
+    cout << "3. Edit a line from a file             " << endl;
+    cout << "4. Delete file                         " << endl;
+    cout << "5. Compile code (C++)                  " << endl;
+    cout << "6. Run an app file                     " << endl;
+    cout << "0. Exit                                " << endl;
+    cout << "Enter your choice . . .                " << endl;
+    cout << "$ ";
     cin >> choice;
 
     return choice;
@@ -69,10 +82,10 @@ int editMenu () {
     return choice;
 }
 
-// Function to ask a file name to open.
-string askFileName () {
+// Function to ask a file name.
+string askFileName (string query) {
     string fileName;
-    cout << "Enter the name file and its extension to open : ";
+    cout << "Enter the name file and its extension to " << query << " : ";
     cin.ignore();
     getline(cin, fileName);
     system("CLS");
@@ -381,7 +394,7 @@ bool TextEditor::readFile() {
     if (ifile.is_open()) {
         while(!ifile.eof()) {
             getline(ifile, line);
-            cout << "\033[34m" << std::setw(3) << iterator << "| " << "\033[37m" << line << endl;
+            cout << BLUE_TEXT << std::setw(3) << iterator << "| " << WHITE_TEXT << line << endl;
             iterator++;
         }
         
@@ -448,36 +461,28 @@ int main() {
     while(breakingPoint) {
         switch(menu()) {
             case 1: {
-                string file_Name;
-                cout << "Enter a file name and its coresponding extension : ";
-                cin.ignore();
-                getline(cin, file_Name);
-                system("CLS");
+                string file_Name = askFileName("create");
                 TextEditor myText(file_Name);
                 myText.writeFile();
                 break;
             }
 
             case 2: {
-                string file_Name = askFileName();
+                string file_Name = askFileName("open");
                 TextEditor myText(file_Name);
                 myText.readFile();
                 break;
             }
 
             case 3: {
-                string file_Name = askFileName();
+                string file_Name = askFileName("open");
                 TextEditor myText(file_Name);
                 myText.modifyFile();
                 break;
             }
 
             case 4: {
-                string file_Name;
-                cout << "Enter the name file and its extension to delete : ";
-                cin.ignore();
-                getline(cin, file_Name);
-                system("CLS");
+                string file_Name = askFileName("delete");
                 TextEditor myText(file_Name);
                 myText.deleteFile();
                 system("PAUSE");
@@ -485,10 +490,7 @@ int main() {
             }
             
             case 5: {
-                string file_Name;
-                cout << "Enter the name file and its extension to compile (CPP only) : ";
-                cin.ignore();
-                getline(cin, file_Name);
+                string file_Name = askFileName("to compile (C++)");
                 TextEditor myText(file_Name);
                 myText.compileCode();
                 break;
