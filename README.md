@@ -14,53 +14,56 @@ Heres a few steps on getting started using FIM! :
 
 ## Features ✨
 
-### ✨ Creating a File ✨
+### ✨ Creating a File
 
-To create a new file, simply run the following command: $ **aasasaa
+To create a new file, simply run the following command: $ **`1`** <br>
+- This will create a new file with the specified name. <br> 
+<br> 
 
-This will create a new file with the specified name.
+### ✍️ Writing a File
 
-### ✍️ Writing a File ✍️
+To write content to a file, use the following command: $ **`1`** <br>
+- You will be prompted to enter the content for the file. Once you're done, save and exit the editor. <br>
+<br> 
 
-To write content to a file, use the following command: $ 1
+### 📖 Read a File
 
-You will be prompted to enter the content for the file. Once you're done, save and exit the editor.
+To read the contents of a file, use the command: $ **`2`** <br>
+- This will display the contents of the specified file on the terminal. <br>
+<br> 
 
-### 📖 Read a File 📖
+### ✏️ Edit File
 
-To read the contents of a file, use the command: $ 2 <br>
-This will display the contents of the specified file on the terminal.
+To edit an existing file, use the command: $ **`3`** <br>
+- This will open the file in the editor, allowing you to make changes. Remember to exit when you're done editing. <br>
+<br> 
 
-### ✏️ Edit File ✏️
+### ❌ Delete File
 
-To edit an existing file, use the command: $ 3
+To delete a file, use the following command: $ **`4`** <br>
+- This will permanently remove the specified file from your system. <br>
+<br> 
 
-This will open the file in the editor, allowing you to make changes. Remember to exit when you're done editing.
+### 🔨 Compile a File
 
-### ❌ Delete File ❌
+If you have a source code file that needs to be compiled, FIM can help you with that.
+Use the following command: $ **`5`** <br>
+- This will compile the specified file and generate an executable file if successful. <br>
+<br> 
 
-To delete a file, use the following command: $ 4
+### 🏃 Run a Machine Code File
 
-This will permanently remove the specified file from your system.
+To execute a machine code file, use the command: $ **`6`** <br>
+- After that, input the file you want to execute (Without the extension).
+- This will run your executable file. <br>
+<br> 
 
-### 🔨 Compile a File 🔨 
-
-If you have a source code file that needs to be compiled, FIM can help you with that. Use the following command: $ 5
-
-This will compile the specified file and generate an executable file if successful.
-
-### 🏃 Run a Machine Code File 🏃
-
-To execute a machine code file, use the command: $ 6
-
-This will run the machine code file and display the output, if any.
-
-## Contributors
+## Contributors 👨‍💻
 
 FIM was brought to you by the following amazing contributors:
 
-👥 R Khairu Wahyutama (221402051)
-👥 Grant Gabriel Tambunan (221402057)
-👥 Khalil Ramzy (221402110)
-👥 Jeremy Sharon (221402107)
+👥 R Khairu Wahyutama (221402051) <br>
+👥 Grant Gabriel Tambunan (221402057) <br>
+👥 Khalil Ramzy (221402110) <br>
+👥 Jeremy Sharon (221402107) <br>
 
