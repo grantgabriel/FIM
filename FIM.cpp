@@ -23,8 +23,10 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <filesystem>
 #include <string>
 using namespace std;
+namespace fs = filesystem;
 
 #define RESET_TEXT "\033[0m"	     // Reset special formatting (such as colour).
 #define BLACK_TEXT "\033[30m"	     // Black text.
@@ -50,18 +52,24 @@ int menu() {
     cout << BLUE_TEXT;
     cout << "\t\t\t\t\t\t\t  FIM - Fi IMproved" << endl;
     cout << GREEN_TEXT;
-    cout << "\t\t\t\t\t\t\t    Version 1.0.1\n" << endl;
+    cout << "\t\t\t\t\t\t\t    Version 1.0.2\n" << endl;
     cout << YELLOW_TEXT;
     cout << "\t\t\t\t\t     FIM is open source and freely distributed." << endl;
-    cout << "\t\t\t\t\t        Feel free to check our github repos!\n" << "\n" << endl;
+    cout << "\t\t\t\t\t        Feel free to check our github repos!" << endl;
+    cout << "\t\t\t\t\t            github.com\\grantgabriel\\FIM\n" << "\n" << endl;
     cout << WHITE_TEXT;
+    cout << "0. Exit                                " << endl;
     cout << "1. Create a new file                   " << endl;
     cout << "2. Read and open from an existing file " << endl;
     cout << "3. Edit a line from a file             " << endl;
     cout << "4. Delete file                         " << endl;
     cout << "5. Compile code (C++)                  " << endl;
     cout << "6. Run an app file                     " << endl;
-    cout << "0. Exit                                " << endl;
+    cout << "7. Print out directory                 " << endl;
+    cout << "8. Make new directory                  " << endl;
+    cout << "9. Delete empty directory              " << endl;
+    cout << "10. Edit an directory name             " << endl;
+    cout << "11. Edit an file name                  " << endl;
     cout << "Enter your choice . . .                " << endl;
     cout << "$ ";
     cin >> choice;
@@ -135,6 +143,14 @@ class TextEditor {
             void removeLine();                      // Removing a line.                                                 [[-> Grant Gabriel]] 
             void deleteFile();                      // Method for deleting a file.                                      [[-> Khalil Ramzy]]
             void compileCode();                     // Method for compiling a C++ file.                                 [[-> Jeremy Sharon]]
+        
+        // File and directory management 
+            void printDirectory();
+            void createDirectory();
+            void deleteAllEmptyDirectory();
+            void renameDirectory();
+            void renameFile();
+
         ~TextEditor(){}; // Destructors
 };
 
@@ -455,6 +471,105 @@ void TextEditor::compileCode() {
     system("PAUSE");
 }
 
+void TextEditor::printDirectory() {
+    string path = ".";
+
+    try {
+          if (fs::exists(path) && fs::is_directory(path)) {
+              for (const auto& entry : fs::directory_iterator(path)) {
+                  std::cout << entry.path().string() << std::endl;
+              }
+          } else {
+              std::cerr << "Path does not exist or is not a directory." << std::endl;
+          }
+      } catch (const fs::filesystem_error& e) {
+          std::cerr << "Filesystem error: " << e.what() << std::endl;
+      } catch (const std::exception& e) {
+          std::cerr << "General error: " << e.what() << std::endl;
+      }
+}
+
+void TextEditor::createDirectory() {
+    string path = file_Name;
+    
+    try {
+        if (fs::exists(path)) {
+            std::cerr << "Directory already exists." << std::endl;
+        } else {
+            if (fs::create_directory(path)) {
+                std::cout << "Directory created: " << path << std::endl;
+            } else {
+                std::cerr << "Failed to create directory." << std::endl;
+            }
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "General error: " << e.what() << std::endl;
+    }
+}
+
+void TextEditor::deleteAllEmptyDirectory() {
+    string path = ".";
+    
+    try {
+        if (fs::exists(path) && fs::is_directory(path)) {
+            for (const auto& entry : fs::directory_iterator(path)) {
+                if (fs::is_directory(entry.status()) && fs::is_empty(entry.path())) {
+                    fs::remove(entry.path());
+                    std::cout << "Deleted empty directory: " << entry.path().string() << std::endl;
+                }
+            }
+        } else {
+            std::cerr << "Path does not exist or is not a directory." << std::endl;
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "General error: " << e.what() << std::endl;
+    }
+}
+
+void TextEditor::renameDirectory() {
+    string old_name = file_Name;
+    cout << "Enter the new folder name: ";
+    string new_name;
+
+    getline(cin, new_name);
+    try {
+        if (fs::exists(old_name) && fs::is_directory(old_name)) {
+            fs::rename(old_name, new_name);
+            std::cout << "Renamed folder: " << old_name << " to " << new_name << std::endl;
+        } else {
+            std::cerr << "Folder does not exist or is not a folder: " << old_name << std::endl;
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "General error: " << e.what() << std::endl;
+    }
+}
+
+void TextEditor::renameFile() {
+    string old_name = file_Name;
+    cout << "Enter the new file name: ";
+    string new_name;
+
+    getline(cin, new_name);
+    try {
+        if (fs::exists(old_name) && fs::is_regular_file(old_name)) {
+            fs::rename(old_name, new_name);
+            std::cout << "Renamed file: " << old_name << " to " << new_name << std::endl;
+        } else {
+            std::cerr << "File does not exist or is not a regular file: " << old_name << std::endl;
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "General error: " << e.what() << std::endl;
+    }
+}
+
 int main() {
     bool breakingPoint = true;
     
@@ -504,6 +619,58 @@ int main() {
                 system("CLS");
                 system(file_Name.c_str()); // Basically run the program into the system.
                 cout << endl;
+                system("PAUSE");
+                break;
+            }
+
+            case 7: {
+                system("CLS");
+                TextEditor myText("bloop.txt");
+                myText.printDirectory();
+                system("PAUSE");
+                break;
+            }
+
+            case 8: {
+                string folder_name;
+                cout << "Enter the directory name to create : ";
+                cin.ignore();
+                getline(cin, folder_name);
+                TextEditor myText(folder_name);
+                system("CLS");
+                myText.createDirectory();
+                system("PAUSE");
+                break;
+            }
+
+            case 9: {
+                TextEditor myText("bloop.txt");
+                system("CLS");
+                myText.deleteAllEmptyDirectory();
+                system("PAUSE");
+                break;
+            }
+
+            case 10: {
+                string folder_name;
+                cout << "Enter the folder name to rename : ";
+                cin.ignore();
+                getline(cin, folder_name);
+                TextEditor myText(folder_name);
+                system("CLS");
+                myText.renameDirectory();
+                system("PAUSE");
+                break;
+            }
+            
+            case 11: {
+                string file_Name;
+                cout << "Enter the file name to rename : ";
+                cin.ignore();
+                getline(cin, file_Name);
+                TextEditor myText(file_Name);
+                system("CLS");
+                myText.renameFile();
                 system("PAUSE");
                 break;
             }
