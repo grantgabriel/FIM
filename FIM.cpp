@@ -145,11 +145,11 @@ class TextEditor {
             void compileCode();                     // Method for compiling a C++ file.                                 [[-> Jeremy Sharon]]
         
         // File and directory management 
-            void printDirectory();
-            void createDirectory();
-            void deleteAllEmptyDirectory();
-            void renameDirectory();
-            void renameFile();
+            void printDirectory();                  // Print the current directory.                                     [[-> Grant Gabriel]]
+            void createDirectory();                 // Create a new directory.                                          [[-> Grant Gabriel]]
+            void deleteAllEmptyDirectory();         // Delete all of the empty directory.                               [[-> Grant Gabriel]]
+            void renameDirectory();                 // Rename a specific directory.                                     [[-> Grant Gabriel]]
+            void renameFile();                      // Rename a specific filename.                                      [[-> Grant Gabriel]]
 
         ~TextEditor(){}; // Destructors
 };
